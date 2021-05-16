@@ -24,8 +24,8 @@ func GenerateConnectionID(len int) (ConnectionID, error) {
 // GenerateConnectionIDForInitial generates a connection ID for the Initial packet.
 // It uses a length randomly chosen between 8 and 20 bytes.
 func GenerateConnectionIDForInitial() (ConnectionID, error) {
-	r := make([]byte, 1)
-	if _, err := rand.Read(r); err != nil {
+	var r [1]byte
+	if _, err := rand.Read(r[:]); err != nil {
 		return nil, err
 	}
 	len := MinConnectionIDLenInitial + int(r[0])%(maxConnectionIDLen-MinConnectionIDLenInitial+1)

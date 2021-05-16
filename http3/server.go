@@ -121,7 +121,7 @@ func (s *Server) ListenAndServe() error {
 // ListenAndServeTLS listens on the UDP address s.Addr and calls s.Handler to handle HTTP/3 requests on incoming connections.
 func (s *Server) ListenAndServeTLS(certFile, keyFile string) error {
 	var err error
-	certs := make([]tls.Certificate, 1)
+	var certs [1]tls.Certificate
 	certs[0], err = tls.LoadX509KeyPair(certFile, keyFile)
 	if err != nil {
 		return err
@@ -129,7 +129,7 @@ func (s *Server) ListenAndServeTLS(certFile, keyFile string) error {
 	// We currently only use the cert-related stuff from tls.Config,
 	// so we don't need to make a full copy.
 	config := &tls.Config{
-		Certificates: certs,
+		Certificates: certs[:],
 	}
 	return s.serveImpl(config, nil)
 }
@@ -502,7 +502,7 @@ func ListenAndServeQUIC(addr, certFile, keyFile string, handler http.Handler) er
 func ListenAndServe(addr, certFile, keyFile string, handler http.Handler) error {
 	// Load certs
 	var err error
-	certs := make([]tls.Certificate, 1)
+	var certs [1]tls.Certificate
 	certs[0], err = tls.LoadX509KeyPair(certFile, keyFile)
 	if err != nil {
 		return err
@@ -510,7 +510,7 @@ func ListenAndServe(addr, certFile, keyFile string, handler http.Handler) error 
 	// We currently only use the cert-related stuff from tls.Config,
 	// so we don't need to make a full copy.
 	config := &tls.Config{
-		Certificates: certs,
+		Certificates: certs[:],
 	}
 
 	// Open the listeners

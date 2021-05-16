@@ -18,8 +18,8 @@ type byteReader interface {
 type byteReaderImpl struct{ io.Reader }
 
 func (br *byteReaderImpl) ReadByte() (byte, error) {
-	b := make([]byte, 1)
-	if _, err := br.Reader.Read(b); err != nil {
+	var b [1]byte
+	if _, err := br.Reader.Read(b[:]); err != nil {
 		return 0, err
 	}
 	return b[0], nil

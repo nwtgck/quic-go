@@ -180,8 +180,8 @@ func unpackHeader(hd headerDecryptor, hdr *wire.Header, data []byte, version pro
 	}
 	// The packet number can be up to 4 bytes long, but we won't know the length until we decrypt it.
 	// 1. save a copy of the 4 bytes
-	origPNBytes := make([]byte, 4)
-	copy(origPNBytes, data[hdrLen:hdrLen+4])
+	var origPNBytes [4]byte
+	copy(origPNBytes[:], data[hdrLen:hdrLen+4])
 	// 2. decrypt the header, assuming a 4 byte packet number
 	hd.DecryptHeader(
 		data[hdrLen+4:hdrLen+4+16],

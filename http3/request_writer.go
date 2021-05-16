@@ -55,9 +55,9 @@ func (w *requestWriter) WriteRequest(str quic.Stream, req *http.Request, gzip bo
 	// send the request body asynchronously
 	go func() {
 		defer req.Body.Close()
-		b := make([]byte, bodyCopyBufferSize)
+		var b [bodyCopyBufferSize]byte
 		for {
-			n, rerr := req.Body.Read(b)
+			n, rerr := req.Body.Read(b[:])
 			if n == 0 {
 				if rerr == nil {
 					continue

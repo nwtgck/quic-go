@@ -209,21 +209,21 @@ func (p *TransportParameters) unmarshal(r *bytes.Reader, sentBy protocol.Perspec
 func (p *TransportParameters) readPreferredAddress(r *bytes.Reader, expectedLen int) error {
 	remainingLen := r.Len()
 	pa := &PreferredAddress{}
-	ipv4 := make([]byte, 4)
-	if _, err := io.ReadFull(r, ipv4); err != nil {
+	var ipv4 [4]byte
+	if _, err := io.ReadFull(r, ipv4[:]); err != nil {
 		return err
 	}
-	pa.IPv4 = net.IP(ipv4)
+	pa.IPv4 = ipv4[:]
 	port, err := utils.BigEndian.ReadUint16(r)
 	if err != nil {
 		return err
 	}
 	pa.IPv4Port = port
-	ipv6 := make([]byte, 16)
-	if _, err := io.ReadFull(r, ipv6); err != nil {
+	var ipv6 [16]byte
+	if _, err := io.ReadFull(r, ipv6[:]); err != nil {
 		return err
 	}
-	pa.IPv6 = net.IP(ipv6)
+	pa.IPv6 = ipv6[:]
 	port, err = utils.BigEndian.ReadUint16(r)
 	if err != nil {
 		return err

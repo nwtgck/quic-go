@@ -105,9 +105,9 @@ func ChooseSupportedVersion(ours, theirs []VersionNumber) (VersionNumber, bool) 
 
 // generateReservedVersion generates a reserved version number (v & 0x0f0f0f0f == 0x0a0a0a0a)
 func generateReservedVersion() VersionNumber {
-	b := make([]byte, 4)
-	_, _ = rand.Read(b) // ignore the error here. Failure to read random data doesn't break anything
-	return VersionNumber((binary.BigEndian.Uint32(b) | 0x0a0a0a0a) & 0xfafafafa)
+	var b [4]byte
+	_, _ = rand.Read(b[:]) // ignore the error here. Failure to read random data doesn't break anything
+	return VersionNumber((binary.BigEndian.Uint32(b[:]) | 0x0a0a0a0a) & 0xfafafafa)
 }
 
 // GetGreasedVersions adds one reserved version number to a slice of version numbers, at a random position
